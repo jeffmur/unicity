@@ -20,7 +20,19 @@ import ntpath
 ## Paths : TO CHANGE FOR LOCAL SETUP ## TODO
 dataDir = '/media/jeffmur/School/dev/490-demo/data'
 geoUsers = dataDir+'/geoLife/user_by_month'
+
+## GeoLife split_by_month Headers
 rawHeaders = [ "Latitude", "Longitude", "Zero", "Altitude", "Num of Days", "Date", "Time"]
+
+def readCSV(file):
+    """
+    Formatting for input csv file
+    """
+    df = pd.read_csv(file, names=rawHeaders, parse_dates=True)
+    df.loc[:,'Time'] = pd.to_datetime(df.Date.astype(str)+' '+df.Time.astype(str))
+
+    return df[['Latitude', 'Longitude', 'Time']]
+
 
 def getAllUID():
     """
@@ -39,11 +51,11 @@ def userDataFrame(UID):
     months = glob.glob(os.path.join(pathToUser + "/*.csv"))
 
     # Concat all month files for user
-    df = pd.concat((pd.read_csv(f, names=rawHeaders)) for f in months)
+    df = pd.concat((readCSV(f)) for f in months)
 
     # Add UID column and fill
     df.insert(0, 'UID', [UID for x in range(0, df.shape[0])])
-    return df[['UID', 'Latitude', 'Longitude', 'Date', 'Time']]
+    return df[['UID', 'Latitude', 'Longitude', 'Time']]
 
 def allUsersDF(listofUID):
     """
@@ -82,11 +94,11 @@ def filterUserMonthRange(UID, fromDate, toDate):
     if(not filtered): return pd.DataFrame() # return empty DF :)
 
     # Concat all month files for user
-    df = pd.concat((pd.read_csv(f, names=rawHeaders)) for f in filtered)
+    df = pd.concat(readCSV(f) for f in filtered)
 
     # Add UID column and fill
     df.insert(0, 'UID', [UID for x in range(0, df.shape[0])])
-    return df[['UID', 'Latitude', 'Longitude', 'Date', 'Time']]
+    return df[['UID', 'Latitude', 'Longitude', 'Time']]
 
 def filterbyMonthRange(uidList=[], fromDate='2008-10', toDate='2008-11'):
     """
