@@ -8,7 +8,6 @@
 * Outputs DataFrame
 """
 
-import lib.preprocess as pre
 import pandas as pd
 import numpy as np
 import glob as glob
@@ -17,7 +16,7 @@ import datetime as dt
 from dateutil import parser, relativedelta
 import ntpath
 
-## Paths : TO CHANGE FOR LOCAL SETUP ## TODO
+## Paths : TO CHANGE FOR LOCAL SETUP ## TODO: Optional?? Just use dotenv
 dataDir = '/media/jeffmur/School/dev/490-demo/data'
 geoUsers = dataDir+'/geoLife/user_by_month'
 
@@ -57,14 +56,11 @@ def userDataFrame(UID):
     df.insert(0, 'UID', [UID for x in range(0, df.shape[0])])
     return df[['UID', 'Latitude', 'Longitude', 'Time']]
 
-def allUsersDF(listofUID):
+def multiUserDF(listofUID):
     """
     Single DataFrame for a given list of users
     """
     return pd.concat([userDataFrame(uid) for uid in listofUID])
-
-
-## make a function to get a certain time range of given user!! ##TODO
 
 def filterUserMonthRange(UID, fromDate, toDate):
     """
