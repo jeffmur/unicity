@@ -15,10 +15,10 @@ import os
 import datetime as dt
 from dateutil import parser, relativedelta
 import ntpath
+import config
 
-## Paths : TO CHANGE FOR LOCAL SETUP ## TODO: Optional?? Just use dotenv
-dataDir = '/media/jeffmur/School/dev/490-demo/data'
-geoUsers = dataDir+'/geoLife/user_by_month'
+## Paths : See config.py : Requires .env
+geoUsers = config.DATA_INPUT_DIR
 
 ## GeoLife split_by_month Headers
 rawHeaders = [ "Latitude", "Longitude", "Zero", "Altitude", "Num of Days", "Date", "Time"]
